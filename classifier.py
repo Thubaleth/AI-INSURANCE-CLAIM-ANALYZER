@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from pydantic import BaseModel
+
 
 
 load_dotenv()
@@ -8,10 +10,16 @@ Api_key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=Api_key)
 
+#clasification results must have a category and reason
+class ClassificationResult(BaseModel):
+  category:str
+  reason:str
+
 def classify(message):
     
-  response = client.responses.create(
+  response = client.responses.parse(
      model="gpt-4o-mini",
+    
      input=f"""
   You are an insurance customer support analyzer.
 
@@ -67,18 +75,26 @@ def classify(message):
   Customer message:
   {message}
 
-  Return ONLY the category name
+  Return the category and a short explanation for why the message belongs to that category.
 
    
-  """
+  """,
+ text_format=ClassificationResult
+  
   )
   
-  return response
+  return response.output_parsed
+
+result = classify(
+  "Another driver crashed into my Toyota yesterday"
+)
 
 
 
-response = classify("Im sick")
 
-print(response.output_text)
+
+
+print("category: ",result.category)
+print("reason: ",result.reason)
 
 
