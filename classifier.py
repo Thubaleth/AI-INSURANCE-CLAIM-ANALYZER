@@ -14,6 +14,11 @@ client = OpenAI(api_key=Api_key)
 class ClassificationResult(BaseModel):
   category:str
   reason:str
+  location:str
+  vehicle:str
+  incident_date:str
+
+
 
 def classify(message):
     
@@ -23,7 +28,8 @@ def classify(message):
      input=f"""
   You are an insurance customer support analyzer.
 
-  your job is to classify the following categories:
+  Your job is to classify the customer's message into exactly ONE
+  of the following categories:
 
   CAR_ACCIDENT
   THEFT
@@ -35,40 +41,46 @@ def classify(message):
   PAYMENT
   OTHER
 
-  Example 1:
-  customer message:
-  "My car was hit by another vehichle."
 
-  category:
+  Example 1:
+
+  Customer message:
+  "My car was hit by another vehicle."
+
+  Category:
   CAR_ACCIDENT
 
+
   Example 2:
-  customer message:
-  "Someone stole my laptop from my house."
+
+  Customer message:
+ "Someone stole my laptop from my house."
 
   Category:
   THEFT
 
 
   Example 3:
-  " My roof was damaged during a heavy storm."
+
+  Customer message:
+  "My roof was damaged during a heavy storm."
 
   Category:
   HOME_DAMAGE
 
+  your job is also to extract the following from the cutomer message:
 
-  Example 4:
-  "I need to claim for my hospital treatment."
+  Location:
+  The city or place where the incident occurred.
 
-   Category:
-  MEDICAL_CLAIM
+  vehicle:
+  The vehicle involved in the incident.
 
+  incident_date:
+  The date or relative data of the incident.
 
-  Example 5:
-  "When will my insurance claim be processed?"
+  If information is not provided, return "unknown"
 
-   Category:
-  CLAIM_STATUS
 
    Now classify this new customer message:
 
@@ -89,12 +101,8 @@ result = classify(
   "Another driver crashed into my Toyota yesterday"
 )
 
-
-
-
-
-
-print("category: ",result.category)
-print("reason: ",result.reason)
-
-
+print("category : ",result.category)
+print("reason : ",result.reason)
+print("location : ",result.location)
+print("vehichle : ",result.vehicle)
+print("incident date : ",result.incident_date)
