@@ -17,6 +17,7 @@ class ClassificationResult(BaseModel):
   location:str
   vehicle:str
   incident_date:str
+  sentiment:str
 
 
 
@@ -79,6 +80,31 @@ def classify(message):
   incident_date:
   The date or relative data of the incident.
 
+  Analyze the sentiment of the customer's message.
+
+  The sentiment must be exactly one of:
+
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+
+  POSITIVE means the customer expresses satisfaction,
+  happiness, gratitude, or a positive experience.
+
+  NEUTRAL means the customer is simply asking for information
+  without expressing a strong emotion.
+
+  NEGATIVE means the customer expresses frustration,
+  anger, disappointment, sadness, or dissatisfaction
+
+    Return:
+  - category
+  - reason
+  - location
+  - vehicle
+  - incident date
+  - sentiment
+
   If information is not provided, return "unknown"
 
 
@@ -98,7 +124,7 @@ def classify(message):
   return response.output_parsed
 
 result = classify(
-  "Another driver crashed into my Toyota yesterday"
+   "I am very happy with how quickly my claim was processed."
 )
 
 print("category : ",result.category)
@@ -106,3 +132,4 @@ print("reason : ",result.reason)
 print("location : ",result.location)
 print("vehichle : ",result.vehicle)
 print("incident date : ",result.incident_date)
+print("sentiment : ",result.sentiment)
